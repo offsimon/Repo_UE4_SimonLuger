@@ -4,6 +4,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class Numbers {
 
@@ -11,48 +13,75 @@ public class Numbers {
 
     }
 
+            /*public class ThreadPoolExample {
+                public static void main(String[] args) {
+                ThreadPoolExecutor executor = (ThreadPoolExecutor)
+                Executors.newFixedThreadPool(2);
+                for (int i = 1; i <= 5; i++) {
+                Task task = new Task("Task " + i);
+                System.out.println("Created : " +
+                task.getName());
+                executor.execute(task);
+                }
+                executor.shutdown();
+                }
+                }*/
+
     public ArrayList<Integer>  iterateNumbersWithApi() {
-
-        ArrayList<Integer> allNumbers = parseNumbers();
-
-    }
-
-    public ArrayList<Integer> parseNumbers() {
 
         Scanner scanner = new Scanner(System.in);
         int chunks = Integer.parseInt(scanner.nextLine());
         int divider = Integer.parseInt(scanner.nextLine());
+
+        ArrayList<Integer> allNumbers = parseNumbers();
+
+        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(8);
+
+        /*for (int i = 0; i < chunks; i++) {
+
+
+        }*/
+
+
+
+        return allNumbers;
+    }
+
+    public ArrayList<Integer> parseNumbers() {
+
+
         ArrayList<Integer> allNumbers = new ArrayList<>();
         boolean isNum = true;
         int isInt = -1;
+        String line = "";
+
 
         try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Test\\Desktop\\Programme\\UE4_SimonLuger\\numbers.csv"))){
 
-            String[] splitString = br.readLine().split(":");
+            while((line = br.readLine())!= null) {
 
-            for (String s : splitString) {
+                String[] splitString = line.split(":");
 
-                if(s.isEmpty() == false){
-                    try {
-                        isInt = Integer.parseInt(s);
-                    } catch (NumberFormatException e) {
-                        isNum = false;
-                    }
+                for (String s : splitString) {
+                    isNum = true;
+                    if(!s.isEmpty()){
+                        try {
+                            isInt = Integer.parseInt(s);
+                        } catch (NumberFormatException e) {
+                            isNum = false;
+                        }
 
-                    if(isNum) {
-                        allNumbers.add(isInt);
+                        if(isNum) {
+                            allNumbers.add(isInt);
+                        }
                     }
                 }
             }
-
-            return allNumbers;
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            } catch (IOException e) {
             e.printStackTrace();
         }
 
-      return null;
+
+        return allNumbers;
     }
 }
