@@ -13,21 +13,7 @@ public class Numbers {
 
     }
 
-            /*public class ThreadPoolExample {
-                public static void main(String[] args) {
-                ThreadPoolExecutor executor = (ThreadPoolExecutor)
-                Executors.newFixedThreadPool(2);
-                for (int i = 1; i <= 5; i++) {
-                Task task = new Task("Task " + i);
-                System.out.println("Created : " +
-                task.getName());
-                executor.execute(task);
-                }
-                executor.shutdown();
-                }
-                }*/
-
-    public ArrayList<Integer>  iterateNumbersWithApi() {
+    public void iterateNumbersWithApi() {
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("chunks>");
@@ -38,20 +24,24 @@ public class Numbers {
         ArrayList<Integer> allNumbers = parseNumbers();
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(8);
 
-        for (int i = 0; i < chunks; i++) {
+        int chunkSize = allNumbers.size() / chunks;
 
+
+        for (int i = 0; i < allNumbers.size(); i+=chunkSize) {
+
+            int finalI = i;
             executor.execute(new Runnable() {
+
                 @Override
                 public void run() {
 
+                    Task task = new Task(finalI, chunkSize, divider, allNumbers);
+                    executor.execute(task);
                 }
             });
-
         }
-        System.out.println(allNumbers.size());
 
-
-        return allNumbers;
+        // System.out.println(allNumbers.size());
     }
 
     public ArrayList<Integer> parseNumbers() {
