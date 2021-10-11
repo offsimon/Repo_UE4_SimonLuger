@@ -30,18 +30,25 @@ public class Numbers {
     public ArrayList<Integer>  iterateNumbersWithApi() {
 
         Scanner scanner = new Scanner(System.in);
+        System.out.print("chunks>");
         int chunks = Integer.parseInt(scanner.nextLine());
+        System.out.print("divider>");
         int divider = Integer.parseInt(scanner.nextLine());
 
         ArrayList<Integer> allNumbers = parseNumbers();
-
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(8);
 
-        /*for (int i = 0; i < chunks; i++) {
+        for (int i = 0; i < chunks; i++) {
 
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
 
-        }*/
+                }
+            });
 
+        }
+        System.out.println(allNumbers.size());
 
 
         return allNumbers;
@@ -84,4 +91,6 @@ public class Numbers {
 
         return allNumbers;
     }
+
+
 }
